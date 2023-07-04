@@ -3,11 +3,11 @@ import { ErrorTypes } from '../../types/ErrorTypes';
 
 type Props = {
   errorMessage: ErrorTypes,
-  onDeleteError: () => void;
+  setErrorMessage: React.Dispatch<React.SetStateAction<ErrorTypes | null>>
 };
 
 export const ErrorMessages: React.FC<Props> = (
-  { errorMessage, onDeleteError },
+  { errorMessage, setErrorMessage },
 ) => {
   return (
     <div className="notification is-danger is-light has-text-weight-normal">
@@ -15,7 +15,7 @@ export const ErrorMessages: React.FC<Props> = (
         type="button"
         aria-label="button"
         className="delete"
-        onClick={() => onDeleteError()}
+        onClick={() => setErrorMessage(null)}
       />
 
       {errorMessage}

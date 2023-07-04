@@ -5,9 +5,9 @@ import { TodoList } from '../TodoList';
 type Props = {
   visibleTodos: Todo[],
   onRemoveTodo: (todo: Todo) => void
-  onChangeStatusTodo: (todoId: number) => void,
-  idTodoForChange: number[],
-  setIdTodoForChange: React.Dispatch<React.SetStateAction<number[]>>
+  onChangeStatusTodo: (todo: Todo) => void,
+  idTodoForTempoTodo: number[],
+  setIdTodoForTempoTodo: React.Dispatch<React.SetStateAction<number[]>>
   onEditTodo: (todo: Todo) => void
 };
 
@@ -15,8 +15,8 @@ export const Main: React.FC<Props> = ({
   visibleTodos,
   onRemoveTodo,
   onChangeStatusTodo,
-  idTodoForChange,
-  setIdTodoForChange,
+  idTodoForTempoTodo,
+  setIdTodoForTempoTodo,
   onEditTodo,
 }) => {
   return (
@@ -24,9 +24,9 @@ export const Main: React.FC<Props> = ({
       <TodoList
         visibleTodos={visibleTodos}
         onRemoveTodo={onRemoveTodo}
-        idTodoForChange={idTodoForChange}
+        idTodoForTempoTodo={idTodoForTempoTodo}
         onChangeStatusTodo={onChangeStatusTodo}
-        setIdTodoForChange={setIdTodoForChange}
+        setIdTodoForTempoTodo={setIdTodoForTempoTodo}
         onEditTodo={onEditTodo}
       />
     </section>

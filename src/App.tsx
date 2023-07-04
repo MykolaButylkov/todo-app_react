@@ -13,12 +13,13 @@ import { ErrorTypes } from './types/ErrorTypes';
 import { getVisibleTodos } from './utils/getVisibleTodos';
 
 const USER_ID = 10548;
+// const USER_ID = undefined;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [disableInput, setDisableInput] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
-  const [idTodoForChange, setIdTodoForChange] = useState<number[]>([]);
+  const [idTodoForTempoTodo, setIdTodoForTempoTodo] = useState<number[]>([]);
   const location = useLocation();
 
   const visibleTodos = getVisibleTodos(location.pathname, todos);
@@ -41,11 +42,9 @@ export const App: React.FC = () => {
   }
 
   const handleAddTodo = async (
-    event: React.FormEvent<HTMLFormElement>,
     input: string,
     setInput: React.Dispatch<React.SetStateAction<string>>,
   ) => {
-    event.preventDefault();
     if (input.trim()) {
       setDisableInput(true);
       const todoTempo = {
@@ -55,9 +54,9 @@ export const App: React.FC = () => {
         completed: false,
       };
 
-      todos.splice(todos.length, 1, todoTempo);
+      setTodos(prev => [...prev, todoTempo]);
 
-      setIdTodoForChange((prev) => [...prev, todoTempo.id]);
+      setIdTodoForTempoTodo((prev) => [...prev, todoTempo.id]);
 
       setInput('');
       try {
@@ -67,10 +66,10 @@ export const App: React.FC = () => {
           completed: false,
         });
 
-        todos.splice(todos.length - 1, 1);
-        await setTodos(prev => [...prev, createdTodo]);
+        setTodos(prev => prev.filter(todo => todo.id !== 0));
+        setTodos(prev => [...prev, createdTodo]);
         setDisableInput(false);
-        setIdTodoForChange([]);
+        setIdTodoForTempoTodo([]);
         setErrorMessage(null);
       } catch (error) {
         setErrorMessage(ErrorTypes.ErrorPost);
@@ -80,57 +79,52 @@ export const App: React.FC = () => {
   };
 
   const handleUpdateTodo = async (todo: Todo) => {
-    setIdTodoForChange((prev) => [...prev, todo.id]);
+    await setIdTodoForTempoTodo((prev) => [...prev, todo.id]);
     try {
       await updateTodo(todo.id, {
         title: todo.title,
         completed: todo.completed,
       });
       setErrorMessage(null);
-      setIdTodoForChange([]);
+      setIdTodoForTempoTodo([]);
     } catch (error) {
       setErrorMessage(ErrorTypes.ErrorPatch);
     }
   };
 
   const handleRemoveTodo = async (todo: Todo) => {
-    setIdTodoForChange((prev) => [...prev, todo.id]);
+    setIdTodoForTempoTodo((prev) => [...prev, todo.id]);
 
     try {
       await deleteTodo(todo.id);
       setTodos(prev => prev.filter(({ id }) => id !== todo.id));
       setErrorMessage(null);
-      setIdTodoForChange([]);
+      setIdTodoForTempoTodo([]);
     } catch (error) {
       setErrorMessage(ErrorTypes.ErrorDelete);
     }
   };
 
-  const handleChangeStatusTodo = async (
-    todoId: number,
+  const handleChangeStatusTodo = (
+    todo: Todo,
   ) => {
-    let newTodo: Todo | null = null;
+    setTodos(todos.map((todoPrev) => {
+      if (todo.id === todoPrev.id) {
+        // console.log(todoPrev.id, todo.id)
+        handleUpdateTodo({ ...todo, completed: !todo.completed });
 
-    await setTodos(todos.map((todo) => {
-      if (todo.id !== todoId) {
-        return todo;
+        return { ...todo, completed: !todo.completed };
       }
 
-      newTodo = { ...todo, completed: !todo.completed };
-
-      return newTodo;
+      return todoPrev;
     }));
-
-    if (newTodo) {
-      handleUpdateTodo(newTodo);
-    }
   };
 
   const handleChangeStatusAllTodo = async () => {
     try {
       const todosStatus = await Promise.all(todos.map(
         ({ id }) => {
-          setIdTodoForChange((prev) => [...prev, id]);
+          setIdTodoForTempoTodo((prev) => [...prev, id]);
 
           return updateTodo(id, {
             completed: !todos.every(todo => todo.completed),
@@ -139,7 +133,7 @@ export const App: React.FC = () => {
       ));
 
       setTodos(todosStatus);
-      setIdTodoForChange([]);
+      setIdTodoForTempoTodo([]);
     } catch {
       setErrorMessage(ErrorTypes.ErrorPatch);
     }
@@ -150,13 +144,13 @@ export const App: React.FC = () => {
       const comletedTodos = todos.filter(todo => todo.completed);
 
       await Promise.all(comletedTodos.map(async todo => {
-        setIdTodoForChange((prev) => [...prev, todo.id]);
+        setIdTodoForTempoTodo((prev) => [...prev, todo.id]);
 
         await deleteTodo(todo.id);
       }));
 
       setTodos(prev => prev.filter(todo => todo.completed === false));
-      setIdTodoForChange([]);
+      setIdTodoForTempoTodo([]);
     } catch (error) {
       setErrorMessage(ErrorTypes.ErrorDelete);
     }
@@ -176,10 +170,6 @@ export const App: React.FC = () => {
     }));
   };
 
-  const handleDeleteErrorMessage = () => {
-    setErrorMessage(null);
-  };
-
   useEffect(() => {
     loadedTodos();
   }, []);
@@ -191,7 +181,9 @@ export const App: React.FC = () => {
   return (
     <div className="todoapp">
       <h1 className="todoapp__title">todos</h1>
-
+      {USER_ID === undefined && (
+        <UserWarning />
+      )}
       <div className="todoapp__content">
         <Header
           countActiveTodo={itemsLeftCount}
@@ -205,8 +197,8 @@ export const App: React.FC = () => {
           visibleTodos={visibleTodos}
           onRemoveTodo={handleRemoveTodo}
           onChangeStatusTodo={handleChangeStatusTodo}
-          idTodoForChange={idTodoForChange}
-          setIdTodoForChange={setIdTodoForChange}
+          idTodoForTempoTodo={idTodoForTempoTodo}
+          setIdTodoForTempoTodo={setIdTodoForTempoTodo}
           onEditTodo={handleEditTodo}
         />
 
@@ -222,7 +214,7 @@ export const App: React.FC = () => {
           && (
             <ErrorMessages
               errorMessage={errorMessage}
-              onDeleteError={handleDeleteErrorMessage}
+              setErrorMessage={setErrorMessage}
             />
           )}
       </div>

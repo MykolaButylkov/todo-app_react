@@ -4,7 +4,6 @@ import cn from 'classnames';
 type Props = {
   countActiveTodo: number,
   onHandleAddTodo: (
-    event: React.FormEvent<HTMLFormElement>,
     input: string,
     setInput: React.Dispatch<React.SetStateAction<string>>,
   ) => void,
@@ -28,6 +27,11 @@ export const Header: React.FC<Props> = ({
     setInput(value);
   };
 
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    onHandleAddTodo(input, setInput);
+  }
+
   return (
     <header className="todoapp__header">
       <button
@@ -43,7 +47,7 @@ export const Header: React.FC<Props> = ({
         style={{ visibility: haveNotTodos ? 'hidden' : 'visible' }}
       />
 
-      <form onSubmit={(event) => (onHandleAddTodo(event, input, setInput))}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           className="todoapp__new-todo"

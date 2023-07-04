@@ -8,8 +8,8 @@ import { Todo } from '../types/Todo';
 type Props = {
   todo: Todo,
   onRemoveTodo: (todo: Todo) => void
-  onChangeStatusTodo: (todoId: number) => void,
-  setIdTodoForChange: React.Dispatch<React.SetStateAction<number[]>>,
+  onChangeStatusTodo: (todo: Todo) => void,
+  setIdTodoForTempoTodo: React.Dispatch<React.SetStateAction<number[]>>,
   onEditTodo: (todo: Todo) => void
 };
 
@@ -17,7 +17,7 @@ export const TodoItem: FC<Props> = ({
   todo,
   onRemoveTodo,
   onChangeStatusTodo,
-  setIdTodoForChange,
+  setIdTodoForTempoTodo,
   onEditTodo,
 }) => {
   const { id, title = '', completed } = todo;
@@ -43,7 +43,7 @@ export const TodoItem: FC<Props> = ({
       ...todo,
       title: titleEdit,
     });
-    setIdTodoForChange((prev) => [id, ...prev]);
+    setIdTodoForTempoTodo((prev) => [...prev, id]);
     setEditing(false);
   };
 
@@ -68,7 +68,7 @@ export const TodoItem: FC<Props> = ({
           type="checkbox"
           className="todo__status"
           checked={completed}
-          onChange={() => onChangeStatusTodo && onChangeStatusTodo(id)}
+          onChange={() => onChangeStatusTodo(todo)}
         />
       </label>
       {editing ? (
@@ -91,7 +91,7 @@ export const TodoItem: FC<Props> = ({
       <button
         type="button"
         className="todo__remove"
-        onClick={() => onRemoveTodo && onRemoveTodo(todo)}
+        onClick={() => onRemoveTodo(todo)}
       >
         ×
       </button>
