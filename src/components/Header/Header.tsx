@@ -15,7 +15,7 @@ type Props = {
 export const Header: React.FC<Props> = ({
   countActiveTodo,
   onHandleAddTodo,
-  disabled: disabeled,
+  disabled,
   onChangeStatusAllTodo,
   haveNotTodos,
 }) => {
@@ -54,7 +54,7 @@ export const Header: React.FC<Props> = ({
           placeholder="What needs to be done?"
           value={input}
           onChange={onChangeInput}
-          disabled={disabeled}
+          disabled={disabled}
         />
       </form>
     </header>

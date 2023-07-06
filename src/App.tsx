@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { UserWarning } from './UserWarning';
 import { Todo } from './types/Todo';
 import {
   createTodo, getTodos, deleteTodo, updateTodo,
@@ -11,15 +10,18 @@ import { Main } from './components/Main/Main';
 import { ErrorMessages } from './components/ErrorMessages/ErrorMessages';
 import { ErrorTypes } from './types/ErrorTypes';
 import { getVisibleTodos } from './utils/getVisibleTodos';
+import { Login } from './components/Login/Login';
+import { DefaultUserId } from './types/DefaultUserId';
 
-const USER_ID = 10548;
-// const USER_ID = undefined;
+// let USER_ID = 10548;
+const USER_ID = DefaultUserId.ZERO;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [disableInput, setDisableInput] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
   const [idTodoForTempoTodo, setIdTodoForTempoTodo] = useState<number[]>([]);
+  const [userId, setUserID] = useState<number>(USER_ID);
   const location = useLocation();
 
   const visibleTodos = getVisibleTodos(location.pathname, todos);
@@ -174,50 +176,60 @@ export const App: React.FC = () => {
     loadedTodos();
   }, []);
 
-  if (!USER_ID) {
-    return <UserWarning />;
-  }
+  const idFromLocalStorage = localStorage.getItem('userId');
+
+  useEffect(() => {
+    if (idFromLocalStorage !== null) {
+      setUserID(+idFromLocalStorage);
+    }
+  }, [userId]);
 
   return (
     <div className="todoapp">
-      <h1 className="todoapp__title">todos</h1>
-      {USER_ID === undefined && (
-        <UserWarning />
-      )}
-      <div className="todoapp__content">
-        <Header
-          countActiveTodo={itemsLeftCount}
-          onHandleAddTodo={handleAddTodo}
-          disabled={disableInput}
-          onChangeStatusAllTodo={handleChangeStatusAllTodo}
-          haveNotTodos={haveNotTodos}
-        />
+      {userId ? (
+        <>
+          <h1 className="todoapp__title">todos</h1>
+          <div className="todoapp__content">
 
-        <Main
-          visibleTodos={visibleTodos}
-          onRemoveTodo={handleRemoveTodo}
-          onChangeStatusTodo={handleChangeStatusTodo}
-          idTodoForTempoTodo={idTodoForTempoTodo}
-          setIdTodoForTempoTodo={setIdTodoForTempoTodo}
-          onEditTodo={handleEditTodo}
-        />
-
-        {!!todos.length && (
-          <Footer
-            itemsLeftCount={itemsLeftCount}
-            onDeleteCompletedTodo={handleDeleteCompletedTodo}
-            isAnyTodoCompleted={isAnyTodoCompleted}
-          />
-        )}
-
-        {errorMessage
-          && (
-            <ErrorMessages
-              errorMessage={errorMessage}
-              setErrorMessage={setErrorMessage}
+            <Header
+              countActiveTodo={itemsLeftCount}
+              onHandleAddTodo={handleAddTodo}
+              disabled={disableInput}
+              onChangeStatusAllTodo={handleChangeStatusAllTodo}
+              haveNotTodos={haveNotTodos}
             />
-          )}
-      </div>
+
+            <Main
+              visibleTodos={visibleTodos}
+              onRemoveTodo={handleRemoveTodo}
+              onChangeStatusTodo={handleChangeStatusTodo}
+              idTodoForTempoTodo={idTodoForTempoTodo}
+              setIdTodoForTempoTodo={setIdTodoForTempoTodo}
+              onEditTodo={handleEditTodo}
+            />
+
+            {!!todos.length && (
+              <Footer
+                itemsLeftCount={itemsLeftCount}
+                onDeleteCompletedTodo={handleDeleteCompletedTodo}
+                isAnyTodoCompleted={isAnyTodoCompleted}
+              />
+            )}
+
+            {errorMessage
+            && (
+              <ErrorMessages
+                errorMessage={errorMessage}
+                setErrorMessage={setErrorMessage}
+              />
+            )}
+          </div>
+
+        </>
+      ) : (
+        <Login setUserID={setUserID} />
+      )}
+
     </div>
   );
 };

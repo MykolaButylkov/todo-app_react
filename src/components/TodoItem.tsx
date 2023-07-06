@@ -61,10 +61,10 @@ export const TodoItem: FC<Props> = ({
   }, []);
 
   return (
-    <div className={cn('todo', { completed })} key={`todo-${id}`}>
-      <label className="todo__status-label" htmlFor="todoStatusCheckbox">
+    <div className={cn('todo', { completed })}>
+      <label className="todo__status-label" htmlFor={todo.id.toString()}>
         <input
-          id="todoStatusCheckbox"
+          id={todo.id.toString()}
           type="checkbox"
           className="todo__status"
           checked={completed}
