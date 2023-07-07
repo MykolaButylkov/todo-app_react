@@ -23,7 +23,7 @@ git clone https://github.com/MykolaButylkov/todo-app_react.git
 ```
 2. Navigate to the project directory:
 ```
-[cd](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/) todo-app_react
+cd todo-app_react
 ```
 3. Install the dependencies:
 ```
