@@ -7,8 +7,8 @@ You can see a live demo of this project [here](https://mykolabutylkov.github.io/
 ## Technologies Used
 
 - `classnames`: This library is used for conditionally joining class names together;
-- `font awesome`: A popular icon library with scalable vector icons for adding visual elements to web applications;
-- `bulma`: A lightweight CSS framework with responsive classes and components, facilitating the creation of stylish and mobile-friendly web interfaces;
+- `font awesome`:  A popular icon library for web applications;
+- `bulma`: A lightweight CSS framework for building stylish and responsive web interfaces;
 - `react` and `react-dom`: Tese libraries are tho core dependencies for building Reat applications;
 - `react-router-dom`: Thos library is used for implementing routing in the React application;
 - SCSS: The project utilizes SCSS (Sass) for stylink and maintaining CSS code;
