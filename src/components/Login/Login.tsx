@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { createUser, getUser } from '../../api/users';
 import { User } from '../../types/User';
@@ -70,21 +71,30 @@ export const Login: React.FC<Props> = ({ setUserID, userId }) => {
 
   return (
     <section className="section">
-      <div className="box is-size-3">
-        <h1>Log in to open todos</h1>
-        <span className="highlight">Email</span>
-        <form onSubmit={handleLoginForm}>
-          <input
-            type="email"
-            value={inputEmail}
-            placeholder="Enter your email"
-            onChange={({ target }) => setInputEmail(target.value)}
-            required
-          />
-          <br />
-          <button type="submit">Login</button>
-        </form>
-      </div>
+      <form className="box mt-5" onSubmit={handleLoginForm}>
+        <h1 className="title is-3">Log in to open todos</h1>
+        <div className="field">
+          <label className="label" htmlFor="user-email">Email</label>
+          <div className="control has-icons-left">
+            <input
+              className="input"
+              type="email"
+              id="user-email"
+              value={inputEmail}
+              placeholder="Enter your email"
+              onChange={({ target }) => setInputEmail(target.value)}
+              required
+            />
+            <span className="icon is-small is-left">
+              <i className="fas fa-envelope"></i>
+            </span>
+          </div>
+        </div>
+
+        <div className="field">
+          <button type="submit" className="button is-primary">Login</button>
+        </div>
+      </form>
     </section>
   );
 };
