@@ -5,7 +5,9 @@ This is a todo app project built with react. It allows users to create, edit and
 You can see a live demo of this project [here](https://mykolabutylkov.github.io/todo-app_react/).
 
 ## Technologies Used
-    - `classnames`: This library is used for conditionally joining class names together.
+    ```
+    `classnames`: This library is used for conditionally joining class names together.
+    ```
     - `react` and `react-dom`: Tese libraries are tho core dependencies for building Reat applications.
     - `react-router-dom`: Thos library is used for implementing routing in the React application.
     - SCSS: The project utilizes SCSS (Sass) for stylink and maintaining CSS code.
@@ -14,7 +16,9 @@ You can see a live demo of this project [here](https://mykolabutylkov.github.io/
 ## Setup Instructions
 To run this project locally, follow these steps:
     1. Clone the repository:
-    `git clone https://github.com/MykolaButylkov/todo-app_react.git`
+    ```
+    git clone https://github.com/MykolaButylkov/todo-app_react.git
+    ```
     2. Navigate to the project directory:
     `[cd](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/) todo-app_react`
     3. Install the dependencies:
