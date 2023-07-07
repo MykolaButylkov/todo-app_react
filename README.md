@@ -5,13 +5,13 @@ This is a todo app project built with react. It allows users to create, edit and
 You can see a live demo of this project [here](https://mykolabutylkov.github.io/todo-app_react/).
 
 ## Technologies Used
-    ```
-    `classnames`: This library is used for conditionally joining class names together.
-    ```
-    - `react` and `react-dom`: Tese libraries are tho core dependencies for building Reat applications.
-    - `react-router-dom`: Thos library is used for implementing routing in the React application.
-    - SCSS: The project utilizes SCSS (Sass) for stylink and maintaining CSS code.
-    - API: An external API is used to fetch phone data and display it in the catalog.
+
+    - `classnames`: This library is used for conditionally joining class names together;
+    - `react` and `react-dom`: Tese libraries are tho core dependencies for building Reat applications;
+    - `react-router-dom`: Thos library is used for implementing routing in the React application;
+    - SCSS: The project utilizes SCSS (Sass) for stylink and maintaining CSS code;
+    - API: An external API is used to fetch phone data and display it in the catalog
+
 
 ## Setup Instructions
 To run this project locally, follow these steps:
