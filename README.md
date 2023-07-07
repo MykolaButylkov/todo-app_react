@@ -16,7 +16,9 @@ You can see a live demo of this project [here](https://mykolabutylkov.github.io/
 ## Setup Instructions
 To run this project locally, follow these steps:
 1. Clone the repository:
-`git clone https://github.com/MykolaButylkov/todo-app_react.git`
+```
+git clone https://github.com/MykolaButylkov/todo-app_react.git
+```
 2. Navigate to the project directory:
 `[cd](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/) todo-app_react`
 3. Install the dependencies:
