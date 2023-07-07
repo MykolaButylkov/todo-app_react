@@ -20,11 +20,17 @@ To run this project locally, follow these steps:
 git clone https://github.com/MykolaButylkov/todo-app_react.git
 ```
 2. Navigate to the project directory:
-`[cd](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/) todo-app_react`
+```
+[cd](https://www.geeksforgeeks.org/cd-command-in-linux-with-examples/) todo-app_react
+```
 3. Install the dependencies:
-`npm install`
+```
+npm install
+```
 4. Start the development server:
-`npm start`
-5. Open your browser and visit http://localhost:3000 to see the application running.
+```
+npm start
+```
+5. Open your browser and visit `http://localhost:3000` to see the application running.
 
 ## Contributing
