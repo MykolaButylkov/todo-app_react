@@ -15,10 +15,8 @@ export const Login: React.FC<Props> = ({ setUserID, userId }) => {
   const handleGetUser = async (
     input: string,
   ) => {
-    let result;
-
     try {
-      result = await getUser(input);
+      const result = await getUser(input);
 
       return result;
     } catch (error) {
@@ -29,10 +27,8 @@ export const Login: React.FC<Props> = ({ setUserID, userId }) => {
   const handleCreateUser = async (
     input: string,
   ) => {
-    let result;
-
     try {
-      result = await createUser(input, {
+      const result = await createUser(input, {
         name: `User-${(Math.random() * 1000).toFixed()}`,
         username: 'UserName',
         email: input,
