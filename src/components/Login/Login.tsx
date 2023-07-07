@@ -3,10 +3,12 @@ import { createUser, getUser } from '../../api/users';
 import { User } from '../../types/User';
 
 type Props = {
-  setUserID: React.Dispatch<React.SetStateAction<number>>,
+  setUserID: React.Dispatch<React.SetStateAction<string | number>>,
+  loadedTodos: () => Promise<void>,
+  userId: string | number,
 };
 
-export const Login: React.FC<Props> = ({ setUserID }) => {
+export const Login: React.FC<Props> = ({ setUserID, userId }) => {
   const [inputEmail, setInputEmail] = useState<string>('');
 
   const handleGetUser = async (
@@ -44,15 +46,25 @@ export const Login: React.FC<Props> = ({ setUserID }) => {
 
   async function handleLoginForm(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const usersColection = await handleGetUser(inputEmail) as User[];
+    const usersColection = await handleGetUser(inputEmail) as User | User[];
 
-    if (usersColection && usersColection.length === 0) {
+    if (userId === 0) {
       const user = await handleCreateUser(inputEmail) as User;
 
       if (user) {
         setUserID(user.id);
         localStorage.setItem('userId', `${user.id}`);
       }
+    }
+
+    if (Array.isArray(usersColection)) {
+      setUserID(usersColection[0].id);
+      localStorage.setItem('userId', `${usersColection[0].id}`);
+    }
+
+    if (usersColection && 'id' in usersColection) {
+      setUserID(usersColection.id);
+      localStorage.setItem('userId', `${usersColection.id}`);
     }
   }
 

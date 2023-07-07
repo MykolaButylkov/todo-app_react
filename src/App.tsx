@@ -11,17 +11,13 @@ import { ErrorMessages } from './components/ErrorMessages/ErrorMessages';
 import { ErrorTypes } from './types/ErrorTypes';
 import { getVisibleTodos } from './utils/getVisibleTodos';
 import { Login } from './components/Login/Login';
-import { DefaultUserId } from './types/DefaultUserId';
-
-// let USER_ID = 10548;
-const USER_ID = DefaultUserId.ZERO;
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [disableInput, setDisableInput] = useState(false);
   const [errorMessage, setErrorMessage] = useState<ErrorTypes | null>(null);
   const [idTodoForTempoTodo, setIdTodoForTempoTodo] = useState<number[]>([]);
-  const [userId, setUserID] = useState<number>(USER_ID);
+  const [userId, setUserID] = useState(() => localStorage.getItem('userId') || 0);
   const location = useLocation();
 
   const visibleTodos = getVisibleTodos(location.pathname, todos);
@@ -34,7 +30,7 @@ export const App: React.FC = () => {
 
   async function loadedTodos() {
     try {
-      const result = await getTodos(USER_ID);
+      const result = await getTodos(+userId);
 
       setTodos(result);
       setErrorMessage(null);
@@ -51,7 +47,7 @@ export const App: React.FC = () => {
       setDisableInput(true);
       const todoTempo = {
         id: 0,
-        userId: USER_ID,
+        userId: +userId,
         title: input,
         completed: false,
       };
@@ -62,9 +58,9 @@ export const App: React.FC = () => {
 
       setInput('');
       try {
-        const createdTodo = await createTodo(USER_ID, {
+        const createdTodo = await createTodo(+userId, {
           title: input,
-          userId: USER_ID,
+          userId: +userId,
           completed: false,
         });
 
@@ -112,7 +108,6 @@ export const App: React.FC = () => {
   ) => {
     setTodos(todos.map((todoPrev) => {
       if (todo.id === todoPrev.id) {
-        // console.log(todoPrev.id, todo.id)
         handleUpdateTodo({ ...todo, completed: !todo.completed });
 
         return { ...todo, completed: !todo.completed };
@@ -174,14 +169,6 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     loadedTodos();
-  }, []);
-
-  const idFromLocalStorage = localStorage.getItem('userId');
-
-  useEffect(() => {
-    if (idFromLocalStorage !== null) {
-      setUserID(+idFromLocalStorage);
-    }
   }, [userId]);
 
   return (
@@ -227,7 +214,7 @@ export const App: React.FC = () => {
 
         </>
       ) : (
-        <Login setUserID={setUserID} />
+        <Login setUserID={setUserID} loadedTodos={loadedTodos} userId={userId} />
       )}
 
     </div>
