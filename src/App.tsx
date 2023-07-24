@@ -168,7 +168,9 @@ export const App: React.FC = () => {
   };
 
   useEffect(() => {
-    loadedTodos();
+    if (userId) {
+      loadedTodos();
+    }
   }, [userId]);
 
   return (
